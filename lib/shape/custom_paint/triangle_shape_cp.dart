@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tower_block_test/color_constant.dart';
+import 'package:tower_block_test/const/color_constant.dart';
 
 enum TriangleShape { baseLeft, baseRight }
 

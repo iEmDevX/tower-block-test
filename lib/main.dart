@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tower_block_test/color_constant.dart';
-import 'package:tower_block_test/shape/custom_paint/daimond_shape_cp.dart';
-import 'package:tower_block_test/shape/custom_paint/triangle_shape_cp.dart';
+import 'package:provider/provider.dart';
+import 'package:tower_block_test/const/color_constant.dart';
 import 'package:tower_block_test/shape/widget/circle_shape_wg.dart';
-import 'package:tower_block_test/shape/widget/daimond_shape_wg.dart';
-import 'package:tower_block_test/shape/widget/square_shape_wg.dart';
-import 'package:tower_block_test/shape/widget/triangle_shape_wg.dart';
-import 'package:tower_block_test/widget/Common/orientation_layout.dart';
+import 'package:tower_block_test/state_manage/block_pvd.dart';
+import 'package:tower_block_test/state_manage/size_block_pvd.dart';
+import 'package:tower_block_test/widget/project/arrow_selected_wg.dart';
 import 'package:tower_block_test/widget/project/select_block_wg.dart';
 
 void main() {
@@ -23,7 +21,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MainUI(),
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => BlockPVD()..init(),
+            lazy: false,
+          ),
+          ChangeNotifierProvider(create: (_) => SizeBlockPVD()),
+        ],
+        child: const MainUI(),
+      ),
     );
   }
 }
@@ -33,39 +40,28 @@ class MainUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var child = context.watch<BlockPVD>().child;
+    var colors = context.read<BlockPVD>().colors;
+
     return Scaffold(
       backgroundColor: ColorConstatnt.grayBG,
       body: SelectBlockWG(
-        child: Expanded(
-          child: SingleChildScrollView(
-            reverse: true,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                const DaimondShapeWG(),
-                const SquareShapeWG(),
-                const SquareShapeWG(),
-                const SquareShapeWG(),
-                const SquareShapeWG(),
-                const SquareShapeWG(),
-                const SquareShapeWG(),
-                const SquareShapeWG(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    TrianglrShapeWG(),
-                    SquareShapeWG(),
-                    TrianglrShapeWG(triangleShape: TriangleShape.baseRight),
-                  ],
-                ),
-              ],
-            ),
-          ),
+        child: ListView.builder(
+          padding: const EdgeInsets.only(bottom: 14),
+          shrinkWrap: true,
+          reverse: true,
+          itemCount: child.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: index == 0 ? ArrowSelectWG(child: child[index]) : child[index],
+            );
+          },
         ),
-        selectButtons: const [
-          CircleShapeWG(),
-          CircleShapeWG(),
-        ],
+        selectButtons: colors.map((color) {
+          var index = colors.indexOf(color);
+          return CircleShapeWG(fillColor: color, indexBtn: index);
+        }).toList(),
       ),
     );
   }
