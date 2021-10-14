@@ -47,7 +47,7 @@ class MainUI extends StatelessWidget {
       backgroundColor: ColorConstatnt.grayBG,
       body: SelectBlockWG(
         child: ListView.builder(
-          padding: const EdgeInsets.only(bottom: 14),
+          padding: const EdgeInsets.only(bottom: 8),
           shrinkWrap: true,
           reverse: true,
           itemCount: child.length,

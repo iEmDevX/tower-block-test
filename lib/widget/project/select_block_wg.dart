@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:tower_block_test/state_manage/block_pvd.dart';
 import 'package:tower_block_test/state_manage/size_block_pvd.dart';
 import 'package:tower_block_test/widget/Common/orientation_layout.dart';
 import 'package:provider/provider.dart';
+import 'package:tower_block_test/widget/project/progress_press_wg.dart';
 
 class SelectBlockWG extends StatefulWidget {
   final Widget child;
   final List<Widget> selectButtons;
 
-  SelectBlockWG({
+  const SelectBlockWG({
     Key? key,
     required this.child,
     required this.selectButtons,
@@ -33,6 +35,7 @@ class _SelectBlockWGState extends State<SelectBlockWG> {
     context.read<SizeBlockPVD>().setGrayBlockKey(keyGray);
     return OrientationLayout(
       portrait: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
             child: Container(
@@ -40,6 +43,7 @@ class _SelectBlockWGState extends State<SelectBlockWG> {
               child: widget.child,
             ),
           ),
+          const ProgressPressWG(),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 20),
             color: Colors.white,
@@ -61,9 +65,16 @@ class _SelectBlockWGState extends State<SelectBlockWG> {
             ),
           ),
           Expanded(
-            child: Container(
-              key: keyGray,
-              child: widget.child,
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    key: keyGray,
+                    child: widget.child,
+                  ),
+                ),
+                const ProgressPressWG(),
+              ],
             ),
           ),
           Container(

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:tower_block_test/const/color_constant.dart';
 import 'package:tower_block_test/shape/shape_super.dart';
@@ -27,9 +25,7 @@ class SquareShapeWG extends StatelessWidget with ShapeSuper {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-
     double widthGray = context.watch<SizeBlockPVD>().grayWidth * 0.3;
-
     var heightSquare = MediaQuery.of(context).orientation == Orientation.landscape ? width * 0.08 : height * 0.08;
 
     return Row(

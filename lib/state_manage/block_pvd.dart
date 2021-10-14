@@ -9,7 +9,7 @@ import 'package:tower_block_test/widget/project/dialog.dart';
 
 class BlockPVD with ChangeNotifier {
   final colors = [ColorConstatnt.pink, ColorConstatnt.blue];
-
+  final int delaySecond = 2000;
   var child = <Widget>[];
 
   DateTime? startTime;
@@ -17,9 +17,12 @@ class BlockPVD with ChangeNotifier {
   int timeUse = 0;
 
   bool isPress = false;
+  bool correctBlock = false;
+  int lastIndex = 0;
+  double percent = 0;
   Map<int, int> successPress = <int, int>{};
 
-  final _durationTime = const Duration(milliseconds: 200);
+  final _durationTime = const Duration(milliseconds: 50);
 
   BuildContext? buildContext;
   GlobalKey key = GlobalKey();
@@ -40,6 +43,9 @@ class BlockPVD with ChangeNotifier {
     startTime = null;
     endTime = null;
     timeUse = 0;
+    percent = 0;
+    correctBlock = false;
+    lastIndex = 0;
     init();
   }
 
@@ -53,7 +59,7 @@ class BlockPVD with ChangeNotifier {
     if (selectShape.isSpecialShape) {
       int success = 0;
       successPress.forEach((key, value) {
-        if (value >= 2000) success++;
+        if (value >= delaySecond) success++;
       });
 
       if (success >= 2) {
@@ -65,7 +71,6 @@ class BlockPVD with ChangeNotifier {
   }
 
   _removeBlock(ShapeSuper selectShape) async {
-    await selectShape.destoyBlock();
     child.removeAt(0);
     _setTimer();
     notifyListeners();
@@ -82,29 +87,64 @@ class BlockPVD with ChangeNotifier {
   }
 
   startCountTime(Color color, int index, BuildContext buildContext) {
-    print(key.currentContext?.size?.width);
-    // if (this.buildContext == null) {
-    //   this.buildContext = buildContext;
-    // }
-    // isPress = true;
-    // _countTime(color, index);
+    if (this.buildContext == null) {
+      this.buildContext = buildContext;
+    }
+    _checkColor(color);
+    notifyListeners();
+    lastIndex = index;
+
+    isPress = true;
+    _countTime(color, index);
+  }
+
+  _checkColor(Color color) {
+    Widget selectShapeWG = child[0];
+    if (selectShapeWG is! ShapeSuper) {
+      return;
+    }
+    ShapeSuper selectShape = selectShapeWG as ShapeSuper;
+    if (selectShape.isSpecialShape) {
+      int pressCount = 0;
+      successPress.forEach((key, value) {
+        pressCount++;
+      });
+
+      if (pressCount >= 2) {
+        correctBlock = true;
+      }
+    } else if (color == selectShape.color) {
+      correctBlock = true;
+    }
   }
 
   endCountTime(int index) {
+    correctBlock = false;
     isPress = false;
     successPress.remove(index);
+    percent = 0;
+    notifyListeners();
   }
 
   _countTime(Color color, int index) async {
     while (isPress) {
       await Future.delayed(_durationTime);
-      int count = (successPress[index] ?? 0) + 200;
+      int count = (successPress[index] ?? 0) + 50;
       successPress[index] = count;
-      if (count >= 2000) {
+
+      _updatePercent();
+      notifyListeners();
+
+      if (count >= delaySecond) {
         _checkDeleteBlock(color);
         break;
       }
     }
+  }
+
+  _updatePercent() {
+    int count = successPress[lastIndex] ?? 0;
+    percent = count / delaySecond;
   }
 
   _openDialog() {

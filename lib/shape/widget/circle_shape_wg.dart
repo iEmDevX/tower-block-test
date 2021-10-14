@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tower_block_test/const/color_constant.dart';
 import 'package:tower_block_test/state_manage/block_pvd.dart';
 import 'package:provider/provider.dart';
-import 'package:tower_block_test/state_manage/size_block_pvd.dart';
 
 class CircleShapeWG extends StatelessWidget {
   final Color fillColor;
@@ -22,12 +21,9 @@ class CircleShapeWG extends StatelessWidget {
     var diameter = MediaQuery.of(context).orientation == Orientation.landscape ? width * 0.1 : height * 0.1;
 
     return GestureDetector(
-      // onLongPressStart: (LongPressStartDetails startDetails) {
-      //   context.read<BlockPVD>().onTab(fillColor);
-      // },
       onTapDown: (_) {
-        // context.read<BlockPVD>().startCountTime(fillColor, indexBtn, context);
-        context.read<SizeBlockPVD>().printKey();
+        context.read<BlockPVD>().startCountTime(fillColor, indexBtn, context);
+        // context.read<SizeBlockPVD>().printKey();
       },
       onTapUp: (_) {
         context.read<BlockPVD>().endCountTime(indexBtn);

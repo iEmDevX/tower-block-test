@@ -7,10 +7,6 @@ class SizeBlockPVD with ChangeNotifier {
 
   Size? get getSizeGrayBlock => _grayBlockKey?.currentContext?.size;
 
-  printKey() {
-    print(_grayBlockKey);
-  }
-
   setGrayWidth() {
     grayWidth = getSizeGrayBlock?.width ?? 0;
     notifyListeners();
