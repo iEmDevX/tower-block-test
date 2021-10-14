@@ -1,6 +1,6 @@
 # tower_block_test
 
-A new Flutter project.
+![alt text](https://raw.githubusercontent.com/iEmDevX/tower-block-test/main/preview.jpeg)
 
 ## Getting Started
 
