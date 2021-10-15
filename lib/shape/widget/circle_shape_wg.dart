@@ -22,7 +22,8 @@ class CircleShapeWG extends StatelessWidget {
 
     return GestureDetector(
       onTapDown: (_) {
-        context.read<BlockPVD>().startCountTime(fillColor, indexBtn, context);
+        context.read<BlockPVD>().seContext(context);
+        context.read<BlockPVD>().startCountTime(fillColor, indexBtn);
         // context.read<SizeBlockPVD>().printKey();
       },
       onTapUp: (_) {

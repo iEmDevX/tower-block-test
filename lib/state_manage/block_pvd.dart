@@ -9,7 +9,7 @@ import 'package:tower_block_test/widget/project/dialog.dart';
 
 class BlockPVD with ChangeNotifier {
   final colors = [ColorConstatnt.pink, ColorConstatnt.blue];
-  final int delaySecond = 2000;
+  final int delayMillisecond = 2000;
   var child = <Widget>[];
 
   DateTime? startTime;
@@ -59,7 +59,7 @@ class BlockPVD with ChangeNotifier {
     if (selectShape.isSpecialShape) {
       int success = 0;
       successPress.forEach((key, value) {
-        if (value >= delaySecond) success++;
+        if (value >= delayMillisecond) success++;
       });
 
       if (success >= 2) {
@@ -86,10 +86,13 @@ class BlockPVD with ChangeNotifier {
     }
   }
 
-  startCountTime(Color color, int index, BuildContext buildContext) {
+  seContext(BuildContext buildContext) {
     if (this.buildContext == null) {
       this.buildContext = buildContext;
     }
+  }
+
+  startCountTime(Color color, int index) async {
     _checkColor(color);
     notifyListeners();
     lastIndex = index;
@@ -127,7 +130,7 @@ class BlockPVD with ChangeNotifier {
   }
 
   _countTime(Color color, int index) async {
-    while (isPress) {
+    while (isPress && lastIndex == index) {
       await Future.delayed(_durationTime);
       int count = (successPress[index] ?? 0) + 50;
       successPress[index] = count;
@@ -135,7 +138,7 @@ class BlockPVD with ChangeNotifier {
       _updatePercent();
       notifyListeners();
 
-      if (count >= delaySecond) {
+      if (count >= delayMillisecond) {
         _checkDeleteBlock(color);
         break;
       }
@@ -144,10 +147,13 @@ class BlockPVD with ChangeNotifier {
 
   _updatePercent() {
     int count = successPress[lastIndex] ?? 0;
-    percent = count / delaySecond;
+    percent = count / delayMillisecond;
   }
 
   _openDialog() {
+    if (buildContext == null) {
+      return;
+    }
     showDialog(
       context: buildContext!,
       builder: (context) {
