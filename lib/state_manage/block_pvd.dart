@@ -59,7 +59,7 @@ class BlockPVD with ChangeNotifier {
     if (selectShape.isSpecialShape) {
       int success = 0;
       successPress.forEach((key, value) {
-        if (value >= delayMillisecond) success++;
+        success++;
       });
 
       if (success >= 2) {
@@ -77,9 +77,8 @@ class BlockPVD with ChangeNotifier {
   }
 
   _setTimer() {
-    if (startTime == null) {
-      startTime = DateTime.now();
-    } else if (child.isEmpty) {
+    startTime ??= DateTime.now();
+    if (child.isEmpty) {
       endTime = DateTime.now();
       timeUse = endTime!.difference(startTime!).inSeconds;
       _openDialog();
@@ -93,7 +92,7 @@ class BlockPVD with ChangeNotifier {
   }
 
   startCountTime(Color color, int index) async {
-    _checkColor(color);
+    _checkColor(color, index);
     notifyListeners();
     lastIndex = index;
 
@@ -101,7 +100,8 @@ class BlockPVD with ChangeNotifier {
     _countTime(color, index);
   }
 
-  _checkColor(Color color) {
+  _checkColor(Color color, int index) {
+    successPress[index] = 0;
     Widget selectShapeWG = child[0];
     if (selectShapeWG is! ShapeSuper) {
       return;

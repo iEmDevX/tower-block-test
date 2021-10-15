@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:tower_block_test/state_manage/block_pvd.dart';
 import 'package:tower_block_test/state_manage/size_block_pvd.dart';
 import 'package:tower_block_test/widget/Common/orientation_layout.dart';
 import 'package:provider/provider.dart';
